@@ -1,0 +1,34 @@
+name: BAU Grade Monitor
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour
+  workflow_dispatch:        # allow manual runs from GitHub
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright python-dotenv
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Run grade monitor
+        env:
+          BAU_USERNAME:    ${{ secrets.BAU_USERNAME }}
+          BAU_PASSWORD:    ${{ secrets.BAU_PASSWORD }}
+          GMAIL_SENDER:    ${{ secrets.GMAIL_SENDER }}
+          GMAIL_APP_PASS:  ${{ secrets.GMAIL_APP_PASS }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+        run: python grade_monitor.py
