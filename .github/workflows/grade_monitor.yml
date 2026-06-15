@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Restore grades database
+        uses: actions/cache@v4
+        with:
+          path: grades.db
+          key: grades-db
+          restore-keys: grades-db
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -32,3 +39,10 @@ jobs:
           GMAIL_APP_PASS:  ${{ secrets.GMAIL_APP_PASS }}
           EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
         run: python grade_monitor.py
+
+      - name: Save grades database
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: grades.db
+          key: grades-db-${{ github.run_id }}
