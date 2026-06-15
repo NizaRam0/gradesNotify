@@ -34,7 +34,7 @@ LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "grade_monit
 MAX_RETRIES       = 3
 RETRY_DELAY       = 45    # seconds between retries
 MIN_RUN_INTERVAL  = 1800  # 30 min — won't hit the server more often than this
-NOTIFY_EMPTY      = True  # set False to skip "no new grades" emails
+NOTIFY_EMPTY      = False  # only email when new grades are found
 
 # Timeouts (ms) — BAU portal is notoriously slow
 T_PAGE_LOAD  = 120_000   # 2 min  — initial page / goto
